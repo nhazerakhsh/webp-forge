@@ -26,7 +26,7 @@ fn main() -> ExitCode {
 /// so CLI output still shows up when launched from a terminal.
 #[cfg(all(windows, not(debug_assertions)))]
 fn attach_console() {
-    extern "system" {
+    unsafe extern "system" {
         fn AttachConsole(process_id: u32) -> i32;
     }
     unsafe {
