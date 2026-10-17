@@ -33,7 +33,7 @@ Original (4000×3000)  ──▶  width ladder × quality ladder  ──▶  out
 ```
 
 - 🎯 **Guaranteed size target** — set a KiB budget and every result fits it (or fails loudly).
-- 🖼️ **Reads PNG, JPEG, TIFF, WEBP and HEIC/HEIF** out of the box.
+- 🖼️ **Reads PNG, JPEG, TIFF and WEBP** — plus **HEIC/HEIF** when built with `--features heic`.
 - ⚡ **Parallel batch conversion** with a configurable worker count.
 - 🖥️ **Two front ends** — a polished desktop GUI, and a CLI that matches the original tool.
 - 🧵 **Non-blocking UI** — conversion runs on background threads with live per-file progress.
@@ -59,26 +59,22 @@ and active queue, and a collapsible terminal log.
 
 ## 🚀 Quick start
 
-### 1. Install the external tools
-
-WebP Forge drives well-known command-line tools rather than bundling codecs.
-Install everything **once**:
-
-| Tool | Needed for | Debian / Ubuntu | macOS (Homebrew) | Fedora (DNF) | Windows |
-| --- | --- | --- | --- | --- | --- |
-| `cwebp` | everything | `apt install webp` | `brew install webp` | `dnf install libwebp-tools` | `scoop install libwebp` |
-| `identify` | reading image size | `apt install imagemagick` | `brew install imagemagick` | `dnf install ImageMagick` | `scoop install imagemagick` |
-| `heif-convert` | HEIC / HEIF only | `apt install libheif-examples` | `brew install libheif` | `dnf install libheif-tools` | libheif tools |
-
-> ImageMagick 7's `magick identify` is picked up automatically — no extra setup.
-
 ### 2. Build & run
 
 ```bash
 cargo run --release                 # opens the GUI
 ```
 
-That's it. On Linux you'll also need the usual GUI build dependencies (below).
+That's it. No separate ImageMagick, `cwebp`, or HEIF utilities are required — PNG,
+JPEG, TIFF, WEBP and HEIC/HEIF decoding plus lossy WebP encoding are all handled
+by Cargo-managed Rust crates (`image`, `imageops`, `libwebp-sys`, and `heic`).
+
+On Linux you'll also need the usual GUI build dependencies (below).
+
+**HEIC/HEIF note:** HEIC/HEIF decoding is opt-in via the `--features heic` flag
+because the `heic` crate is dual AGPL-3.0-only / commercial licensing. Build with
+`cargo build --release --features heic` to enable HEIC/HEIF input. Without it,
+HEIC/HEIF files are rejected with a clear error message.
 
 ---
 
@@ -141,7 +137,8 @@ the smallest, lowest-quality pass is too big, that image is reported as failed.
 **Requirements**
 
 - Rust **2024 edition** (Rust 1.85+)
-- The external tools listed above
+- A C compiler (gcc/clang) — Cargo builds the bundled WebP codec (`libwebp-sys`) from source
+- For HEIC/HEIF input: `--features heic`
 
 **Linux GUI dependencies**
 
@@ -186,9 +183,7 @@ as coloured terminal output and the GUI renders as live queue rows.
 
 | Symptom | Fix |
 | --- | --- |
-| `Missing command: cwebp` | Install the `webp` package (see the table above). |
-| `Missing command: identify` | Install ImageMagick. |
-| `heif-convert is missing` | Install the libheif tools to convert HEIC/HEIF. |
+| HEIC/HEIF files rejected | Rebuild with `--features heic` (the `heic` crate is AGPL-3.0-only/commercial). |
 | Image keeps failing | Try a larger `--max-size`, or check the terminal log for the exact reason. |
 | "Could not reach N KiB" | Even the smallest pass was too big — raise the limit. |
 | Two inputs share a name | Rename one input; both would write the same `.webp`. |

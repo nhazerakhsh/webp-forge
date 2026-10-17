@@ -5,13 +5,22 @@ edition = "2024"
 
 [dependencies]
 eframe = "0.37.0"
-image = { version = "0.25", default-features = false, features = ["png"] }
+image = { version = "0.25", default-features = false, features = ["jpeg", "png", "tiff", "webp"] }
+libwebp-sys = "0.9"
+heic = { version = "0.1.6", optional = true }
 rfd = "0.17.2"
 tempfile = "3.27.0"
-which = "8.0.6"
 
 [target."cfg(unix)".dependencies]
 libc = "0.2.191"
+
+[features]
+default = []
+# HEIC/HEIF decoding via the pure-Rust `heic` crate (imazen). No native
+# libraries or command-line tools are required. NOTE: `heic` is dual
+# AGPL-3.0-only / commercial — opt in only if that works for your licensing.
+# Without this feature, HEIC/HEIF inputs are rejected with a clear error.
+heic = ["dep:heic"]
 
 [profile.release]
 opt-level = 3
