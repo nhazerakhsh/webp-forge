@@ -43,6 +43,8 @@ fn usage(program: &str) {
          --jobs N       Number of parallel workers (default: 4)\n  \
          --help         Show this help\n\n\
          Run without arguments to open the graphical interface.\n\n\
+         HEIC/HEIF input requires the `heic` Cargo feature:\n  \
+         cargo build --release --features heic\n\n\
          Examples:\n  \
          {program} *.jpg *.heic\n  \
          {program} *.jpg *.png --max-size 300\n  \

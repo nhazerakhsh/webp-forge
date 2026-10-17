@@ -831,8 +831,11 @@ impl App {
             ui.add_space(14.0);
             ui.label(
                 RichText::new(
-                    "Shrinks PNG, JPEG, TIFF, WEBP and HEIC/HEIF images into WebP files, walking a \
-                     ladder of widths and qualities until every result fits your size limit.",
+                    format!(
+                        "Shrinks PNG, JPEG, TIFF, WEBP{} images into WebP files, walking a \
+                         ladder of widths and qualities until every result fits your size limit.",
+                        if cfg!(feature = "heic") { " and HEIC/HEIF" } else { "" }
+                    )
                 )
                 .size(14.0)
                 .color(TEXT.gamma_multiply(0.9)),
@@ -888,7 +891,7 @@ impl App {
             ui.add_space(24.0);
             ui.vertical_centered(|ui| {
                 ui.label(RichText::new("No images yet — drop some above to get started.").color(MUTED));
-                ui.label(RichText::new("PNG · JPEG · TIFF · WEBP · HEIC/HEIF").size(12.0).color(MUTED.gamma_multiply(0.7)));
+                ui.label(RichText::new(format!("PNG · JPEG · TIFF · WEBP{}", if cfg!(feature = "heic") { " · HEIC/HEIF" } else { "" })).size(12.0).color(MUTED.gamma_multiply(0.7)));
             });
             return;
         }

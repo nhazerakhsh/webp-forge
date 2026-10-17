@@ -141,7 +141,10 @@ fn decode_image(bytes: &[u8], ext: &str) -> Result<RgbaImage, String> {
             #[cfg(not(feature = "heic"))]
             {
                 let _ = bytes;
-                Err("HEIC/HEIF support is not enabled. Rebuild with `--features heic`.".to_string())
+                Err(
+                    "HEIC/HEIF decoding is not enabled in this build.\n  Rebuild with the Cargo feature:\n    cargo build --release --features heic\n  (the `heic` crate is dual AGPL-3.0-only / commercial licensing)"
+                        .to_string(),
+                )
             }
         }
         "png" | "jpg" | "jpeg" | "tif" | "tiff" | "webp" => {

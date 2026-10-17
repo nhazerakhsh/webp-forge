@@ -66,15 +66,21 @@ cargo run --release                 # opens the GUI
 ```
 
 That's it. No separate ImageMagick, `cwebp`, or HEIF utilities are required — PNG,
-JPEG, TIFF, WEBP and HEIC/HEIF decoding plus lossy WebP encoding are all handled
-by Cargo-managed Rust crates (`image`, `imageops`, `libwebp-sys`, and `heic`).
+JPEG, TIFF, WEBP decoding plus lossy WebP encoding are all handled by
+Cargo-managed Rust crates (`image`, `imageops`, `libwebp-sys`).
+
+> **HEIC/HEIF input requires an opt-in Cargo feature.** HEIC/HEIF decoding is not
+> compiled in by default because the `heic` crate is dual AGPL-3.0-only /
+> commercial licensing. To convert `.heic`/`.heif` files, rebuild with:
+>
+> ```bash
+> cargo build --release --features heic
+> ```
+>
+> Without `--features heic`, HEIC/HEIF files are rejected with a message telling
+> you to rebuild with the feature.
 
 On Linux you'll also need the usual GUI build dependencies (below).
-
-**HEIC/HEIF note:** HEIC/HEIF decoding is opt-in via the `--features heic` flag
-because the `heic` crate is dual AGPL-3.0-only / commercial licensing. Build with
-`cargo build --release --features heic` to enable HEIC/HEIF input. Without it,
-HEIC/HEIF files are rejected with a clear error message.
 
 ---
 
