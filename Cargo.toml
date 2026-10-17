@@ -1,0 +1,20 @@
+[package]
+name = "webp-forge"
+version = "1.2.0"
+edition = "2024"
+
+[dependencies]
+eframe = "0.37.0"
+image = { version = "0.25", default-features = false, features = ["png"] }
+rfd = "0.17.2"
+tempfile = "3.27.0"
+which = "8.0.6"
+
+[target."cfg(unix)".dependencies]
+libc = "0.2.191"
+
+[profile.release]
+opt-level = 3
+lto = "thin"
+codegen-units = 1
+strip = true
